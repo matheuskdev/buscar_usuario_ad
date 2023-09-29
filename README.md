@@ -17,7 +17,7 @@ Este é um script PowerShell simples para buscar informações de usuários no A
 3. Execute o script usando o seguinte comando:
 
    ```powershell
-   ./ad-lista.ps1
+   ./QueryAD.ps1
    ```
 
 4. O script irá buscar informações de usuários no AD e gerar dois arquivos:
