@@ -21,8 +21,8 @@ Este é um script PowerShell simples para buscar informações de usuários no A
    ```
 
 4. O script irá buscar informações de usuários no AD e gerar dois arquivos:
-   - `ad-lista.html`: Um relatório em formato HTML que inclui informações dos usuários em uma tabela formatada.
-   - `ad-lista.csv`: Um arquivo CSV contendo os dados dos usuários.
+   - `mk_query-lista.html`: Um relatório em formato HTML que inclui informações dos usuários em uma tabela formatada.
+   - `mk_query-lista.csv`: Um arquivo CSV contendo os dados dos usuários.
 
 ## Personalização
 
