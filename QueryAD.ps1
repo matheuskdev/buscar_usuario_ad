@@ -3,7 +3,7 @@
 # Query AD
 # Extrair a lista de usuários do Active Directory.
 # Executar: 
-# ./ad-lista.ps1
+# ./QueryAD.ps1
 # Dev: Matheus Guilherme
 #
 #-------------------------------------------------------------------#
