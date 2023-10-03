@@ -21,10 +21,10 @@ $dominio = (Get-ADDomain).Forest # Nome do Domínio
 Import-Module ActiveDirectory
 
 # Obtém informações dos usuários do Active Directory, incluindo a propriedade MemberOf
-$usuarios = @(Get-ADUser -Filter * -Properties Company, SamAccountName, Name, Mail, Department, Title, PasswordNeverExpires, Enabled, Created, MemberOf)
+$usuarios = @(Get-ADUser -Filter * -Properties Company, SamAccountName, Name, Mail, Department, Title, PasswordNeverExpires, Enabled, Created, Description, Office, MemberOf)
 
 # Seleciona as propriedades desejadas e ordena pela Empresa (Company) A-Z
-$resultado = $usuarios | Select-Object Company, SamAccountName, Name, Mail, Department, Title, PasswordNeverExpires, Enabled, Created, @{Name='MemberOf';Expression={$_.MemberOf -join ','}} | Sort-Object "Company"
+$resultado = $usuarios | Select-Object Company, SamAccountName, Name, Mail, Department, Title, PasswordNeverExpires, Enabled, Created, Description, Office, @{Name='MemberOf';Expression={$_.MemberOf -join ','}} | Sort-Object "Company"
 
 # Gera o arquivo HTML
 $relatorioHTML = @"
@@ -78,13 +78,14 @@ $relatorioHTML = @"
 
     <table class='table-users'>
         <tr>
-            <th>Empresa</th>
             <th>Nome de Usuário</th>
-            <th>Nome</th>
+            <th>Nome Completo</th>
             <th>E-mail</th>
+            <th>Descrição</th>
+            <th>Escritório</th>
+            <th>Empresa</th>
             <th>Departamento</th>
-            <th>Título</th>
-            <th>Senha Expira</th>
+            <th>Cargo</th>
             <th>Habilitado</th>
             <th>Data de Criação</th>
             <th>Membro de</th>
@@ -92,19 +93,20 @@ $relatorioHTML = @"
             $($resultado | ForEach-Object {
                 $memberOf = $_.MemberOf -split ','  # Separar os DNs em uma lista
                 $ouNames = $memberOf | ForEach-Object {
-                    $ou = ($_ -split ',', 2)[0]  # Extrair apenas o nome da primeira OU
-                     $ou -replace '^CN=|OU=|DC=|DC=', ''   # Remover "CN=", "OU=", "DC=" do início do nome
+                    $ou = ($_ -split '---', 2)[0]  # Extrair apenas o nome da primeira OU
+                     $ou -replace '^CN=|OU=|DC=fmsa|DC=recife', ''   # Remover "CN=", "OU=", "DC=fmsa" ou "DC=recife" do início do nome
                 }
                 $ouNamesString = $ouNames -join ', '  # Juntar os nomes das OUs em uma única string
 
                 "<tr>
-                    <td>$($_.Company)</td>
                     <td>$($_.SamAccountName)</td>
                     <td>$($_.Name)</td>
                     <td>$($_.Mail)</td>
+                    <td>$($_.Description)</td>
+                    <td>$($_.Office)</td>
+                    <td>$($_.Company)</td>
                     <td>$($_.Department)</td>
                     <td>$($_.Title)</td>
-                    <td>$($_.PasswordNeverExpires)</td>
                     <td>$($_.Enabled)</td>
                     <td>$($_.Created)</td>
                     <td>$ouNamesString</td>
